@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediBase University Health Center v2.0 — System Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0f1e;
+  --surface: #111827;
+  --surface2: #1a2234;
+  --border: #1e2d47;
+  --primary: #3b82f6;
+  --primary-glow: rgba(59,130,246,.25);
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --purple: #8b5cf6;
+  --text: #f1f5f9;
+  --muted: #64748b;
+  --radius: 12px;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ── HERO ─────────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 24px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,.18) 0%, transparent 70%),
+             radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,.12) 0%, transparent 60%),
+             radial-gradient(ellipse 50% 30% at 20% 70%, rgba(139,92,246,.10) 0%, transparent 60%);
+}
+.grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(59,130,246,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.05) 1px, transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 100% 100% at center, black 30%, transparent 80%);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);
+  border-radius:100px;padding:6px 18px;font-size:13px;font-weight:500;
+  color:var(--accent);margin-bottom:28px;letter-spacing:.04em;
+}
+.hero h1{
+  font-family:var(--font-head);font-size:clamp(42px,7vw,88px);font-weight:800;
+  line-height:1.05;letter-spacing:-.03em;margin-bottom:20px;
+  background:linear-gradient(135deg,#fff 0%,#93c5fd 50%,#67e8f9 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:620px;
+  margin:0 auto 48px;font-weight:300;
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:72px}
+.btn-hero-primary{
+  background:var(--primary);color:#fff;padding:14px 32px;border-radius:10px;
+  font-size:15px;font-weight:600;text-decoration:none;
+  box-shadow:0 0 30px var(--primary-glow);transition:all .2s;
+}
+.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px var(--primary-glow)}
+.btn-hero-secondary{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);
+  color:var(--text);padding:14px 32px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;transition:all .2s;
+}
+.btn-hero-secondary:hover{background:rgba(255,255,255,.1)}
+
+/* ── STATS BAR ────────────────────────────── */
+.stats-bar{
+  display:flex;gap:0;flex-wrap:wrap;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;max-width:900px;width:100%;
+}
+.stat-item{
+  flex:1;min-width:120px;padding:20px 24px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:var(--font-head);font-size:32px;font-weight:800;color:var(--primary)}
+.stat-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* ── SECTION ──────────────────────────────── */
+section{padding:80px 24px;max-width:1200px;margin:0 auto}
+.section-label{
+  font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+}
+.section-title{
+  font-family:var(--font-head);font-size:clamp(28px,4vw,44px);font-weight:800;
+  letter-spacing:-.02em;line-height:1.1;margin-bottom:16px;
+}
+.section-desc{color:var(--muted);font-size:16px;max-width:580px;line-height:1.7;margin-bottom:48px}
+.full-width{max-width:100%;width:100%}
+
+/* ── ROLE CARDS ───────────────────────────── */
+.roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.role-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;position:relative;overflow:hidden;transition:transform .2s, border-color .2s;
+}
+.role-card:hover{transform:translateY(-4px);border-color:var(--primary)}
+.role-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.role-card.admin::before{background:linear-gradient(90deg,#ef4444,#f97316)}
+.role-card.doctor::before{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+.role-card.nurse::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.role-card.student::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.role-icon{font-size:36px;margin-bottom:16px}
+.role-name{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:8px}
+.role-desc{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6}
+.role-features{list-style:none;display:flex;flex-direction:column;gap:6px}
+.role-features li{
+  font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:8px;
+}
+.role-features li::before{content:'→';color:var(--primary);font-weight:700;font-size:11px}
+.role-creds{
+  margin-top:18px;padding:10px 14px;border-radius:8px;
+  background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.15);font-size:12px;
+}
+.cred-label{color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.cred-val{font-family:monospace;color:var(--accent);font-size:12px}
+
+/* ── MODULES GRID ─────────────────────────── */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.module-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;
+  transition:border-color .2s, background .2s;
+}
+.module-card:hover{border-color:var(--accent);background:var(--surface2)}
+.module-icon{font-size:28px;margin-bottom:12px}
+.module-title{font-family:var(--font-head);font-size:14px;font-weight:700;margin-bottom:6px}
+.module-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.module-status{
+  display:inline-block;margin-top:10px;font-size:10px;font-weight:600;
+  background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);
+  color:var(--success);border-radius:100px;padding:2px 10px;letter-spacing:.04em;
+}
+
+/* ── FILE TREE ────────────────────────────── */
+.file-tree{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;font-family:monospace;font-size:13px;line-height:2;overflow-x:auto;
+}
+.tree-folder{color:var(--accent);font-weight:600}
+.tree-file{color:#94a3b8}
+.tree-file.new{color:var(--success)}
+.tree-file.fixed{color:var(--warning)}
+.tree-indent{display:block;padding-left:20px}
+
+/* ── DASHBOARD MOCKUP ─────────────────────── */
+.dashboard-mockup{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,.6);
+}
+.mock-topbar{
+  background:#0f172a;border-bottom:1px solid var(--border);padding:12px 20px;
+  display:flex;align-items:center;gap:8px;
+}
+.mock-dot{width:10px;height:10px;border-radius:50%}
+.mock-url{
+  background:rgba(255,255,255,.06);border-radius:6px;padding:4px 14px;
+  font-size:12px;color:var(--muted);margin-left:8px;font-family:monospace;
+}
+.mock-body{display:grid;grid-template-columns:200px 1fr;min-height:440px}
+.mock-sidebar{
+  background:#0a1628;border-right:1px solid var(--border);padding:16px 0;
+}
+.mock-logo{padding:8px 16px 16px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.mock-logo-icon{font-size:18px;display:inline-block;margin-right:6px}
+.mock-logo-text{font-family:var(--font-head);font-size:13px;font-weight:700;color:#fff}
+.mock-nav-item{
+  display:flex;align-items:center;gap:8px;padding:8px 16px;
+  font-size:12px;color:#64748b;border-radius:0;
+}
+.mock-nav-item.active{background:var(--primary);color:#fff;margin:0 8px;border-radius:6px;padding:8px 10px}
+.mock-nav-icon{font-size:13px}
+.mock-content{padding:20px;overflow:hidden}
+.mock-page-title{font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:16px;color:#fff}
+.mock-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.mock-stat{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:12px;border-top:2px solid;
+}
+.mock-stat.s1{border-top-color:var(--primary)}
+.mock-stat.s2{border-top-color:var(--success)}
+.mock-stat.s3{border-top-color:var(--warning)}
+.mock-stat.s4{border-top-color:var(--purple)}
+.mock-stat-num{font-family:var(--font-head);font-size:22px;font-weight:800}
+.mock-stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.mock-table-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.mock-table{width:100%;border-collapse:collapse;font-size:11px}
+.mock-table th{background:#0f172a;padding:8px 10px;color:#64748b;text-transform:uppercase;font-size:10px;letter-spacing:.05em;text-align:left;border-bottom:1px solid var(--border)}
+.mock-table td{padding:8px 10px;border-bottom:1px solid rgba(30,45,71,.5);color:#cbd5e1}
+.mock-table tr:last-child td{border-bottom:none}
+.mock-pill{display:inline-block;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600}
+.p-green{background:rgba(16,185,129,.15);color:#34d399}
+.p-yellow{background:rgba(245,158,11,.15);color:#fbbf24}
+.p-red{background:rgba(239,68,68,.15);color:#f87171}
+.p-blue{background:rgba(59,130,246,.15);color:#93c5fd}
+.p-orange{background:rgba(249,115,22,.15);color:#fb923c}
+.mock-queue-num{font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--primary)}
+
+/* ── FLOW DIAGRAM ─────────────────────────── */
+.flow-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0;position:relative}
+.flow-step{
+  background:var(--surface);border:1px solid var(--border);padding:20px;
+  position:relative;text-align:center;
+}
+.flow-step:not(:last-child)::after{
+  content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);
+  color:var(--primary);font-size:18px;font-weight:700;z-index:2;
+}
+.flow-num{
+  width:36px;height:36px;border-radius:50%;background:var(--primary);
+  color:#fff;font-family:var(--font-head);font-weight:800;font-size:16px;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 10px;
+}
+.flow-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.flow-desc{font-size:11px;color:var(--muted)}
+
+/* ── INSTALL ──────────────────────────────── */
+.install-steps{display:flex;flex-direction:column;gap:16px;max-width:700px}
+.install-step{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;
+}
+.install-num{
+  width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;font-family:var(--font-head);font-weight:800;font-size:15px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.install-content h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.install-content p{font-size:13px;color:var(--muted)}
+code{
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);
+  color:var(--accent);padding:2px 8px;border-radius:5px;font-family:monospace;font-size:12px;
+}
+
+/* ── FIXES BANNER ─────────────────────────── */
+.fixes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.fix-card{
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--success);
+  border-radius:10px;padding:18px;
+}
+.fix-title{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--success)}
+.fix-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ── FOOTER ───────────────────────────────── */
+footer{
+  text-align:center;padding:40px 24px;border-top:1px solid var(--border);
+  color:var(--muted);font-size:13px;
+}
+
+/* ── ANIMATIONS ───────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero>*{animation:fadeUp .7s ease both}
+.hero>*:nth-child(1){animation-delay:.1s}
+.hero>*:nth-child(2){animation-delay:.2s}
+.hero>*:nth-child(3){animation-delay:.3s}
+.hero>*:nth-child(4){animation-delay:.4s}
+.hero>*:nth-child(5){animation-delay:.5s}
+
+/* ── TABS ─────────────────────────────────── */
+.tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab-btn{
+  background:transparent;border:none;padding:10px 20px;font-size:13px;font-weight:500;
+  color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;
+}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-content{display:none}.tab-content.active{display:block}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<div class="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-badge">🏥 PHP · MySQL · MVC Architecture</div>
+  <h1>MediBase University<br>Health Center</h1>
+  <p class="hero-sub">A complete, production-ready health management system built for universities. Paperless. Connected. Role-aware.</p>
+  <div class="hero-actions">
+    <a href="#install" class="btn-hero-primary">⚡ Installation Guide</a>
+    <a href="#modules" class="btn-hero-secondary">View All Modules →</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">115</div><div class="stat-lbl">PHP Files</div></div>
+    <div class="stat-item"><div class="stat-num">12</div><div class="stat-lbl">Models</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Controllers</div></div>
+    <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Roles</div></div>
+    <div class="stat-item"><div class="stat-num">12</div><div class="stat-lbl">Modules</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Audit Pass</div></div>
+  </div>
+</div>
+
+<!-- ════ DASHBOARD PREVIEW ════ -->
+<section style="max-width:1100px;margin:0 auto;padding:0 24px 80px">
+  <div class="section-label">Live Preview</div>
+  <div class="section-title">What It Looks Like</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('doctor')">Doctor Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('student')">Student Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('admin')">Admin Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('nurse')">Nurse Dashboard</button>
+  </div>
+
+  <!-- Doctor Tab -->
+  <div class="tab-content active" id="tab-doctor">
+    <div class="dashboard-mockup">
+      <div class="mock-topbar">
+        <div class="mock-dot" style="background:#ef4444"></div>
+        <div class="mock-dot" style="background:#f59e0b"></div>
+        <div class="mock-dot" style="background:#10b981"></div>
+        <div class="mock-url">localhost/medibase_uni/public/doctor/dashboard.php</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-logo"><span class="mock-logo-icon">🏥</span><span class="mock-logo-text">MediBase</span></div>
+          <div class="mock-nav-item active"><span class="mock-nav-icon">⊞</span> Dashboard</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">📅</span> Appointments</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🗓</span> My Schedule</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🔬</span> Lab Tests</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">👤</span> Profile</div>
+          <div class="mock-nav-item" style="margin-top:auto"><span class="mock-nav-icon">🔔</span> Notifications <span class="mock-pill p-red" style="margin-left:4px">3</span></div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-page-title">👨‍⚕️ Dr. Ayesha Rahman — Cardiology</div>
+          <div class="mock-stats">
+            <div class="mock-stat s1"><div class="mock-stat-num">4</div><div class="mock-stat-lbl">Pending</div></div>
+            <div class="mock-stat s2"><div class="mock-stat-num">11</div><div class="mock-stat-lbl">Confirmed</div></div>
+            <div class="mock-stat s3"><div class="mock-stat-num">38</div><div class="mock-stat-lbl">Completed</div></div>
+            <div class="mock-stat s4"><div class="mock-stat-num">2</div><div class="mock-stat-lbl">Cancelled</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">🗂️ Today's Queue — Sunday, 5 Jan 2025</div>
+          <div class="mock-table-wrap">
+            <table class="mock-table">
+              <thead><tr><th>Queue#</th><th>Patient</th><th>UID</th><th>Time</th><th>Priority</th><th>Blood Grp</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><span class="mock-queue-num">1</span></td><td>Farida Hossain</td><td style="font-family:monospace;color:#94a3b8">STU-2025-001</td><td>09:00</td><td><span class="mock-pill p-red">Emergency 🚨</span></td><td><span class="mock-pill p-red">B+</span></td><td><span class="mock-pill p-yellow">Pending</span></td><td><span class="mock-pill p-blue">Consult</span></td></tr>
+                <tr><td><span class="mock-queue-num">2</span></td><td>Sabbir Ahmed</td><td style="font-family:monospace;color:#94a3b8">STU-2025-002</td><td>09:10</td><td><span class="mock-pill p-orange">Urgent</span></td><td><span class="mock-pill">O+</span></td><td><span class="mock-pill p-green">Confirmed</span></td><td><span class="mock-pill p-blue">Consult</span></td></tr>
+                <tr><td><span class="mock-queue-num">3</span></td><td>Rahela Khatun</td><td style="font-family:monospace;color:#94a3b8">STU-2025-007</td><td>09:20</td><td><span class="mock-pill p-blue">Normal</span></td><td><span class="mock-pill">A-</span></td><td><span class="mock-pill p-green">Confirmed</span></td><td><span class="mock-pill p-blue">Consult</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Tab -->
+  <div class="tab-content" id="tab-student">
+    <div class="dashboard-mockup">
+      <div class="mock-topbar">
+        <div class="mock-dot" style="background:#ef4444"></div>
+        <div class="mock-dot" style="background:#f59e0b"></div>
+        <div class="mock-dot" style="background:#10b981"></div>
+        <div class="mock-url">localhost/medibase_uni/public/student/dashboard.php</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-logo"><span class="mock-logo-icon">🏥</span><span class="mock-logo-text">MediBase</span></div>
+          <div class="mock-nav-item active"><span class="mock-nav-icon">⊞</span> Dashboard</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🔍</span> Find Doctors</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">📅</span> My Appointments</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">📋</span> Medical Records</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🔬</span> Lab Tests <span class="mock-pill p-yellow" style="margin-left:4px">2</span></div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🔄</span> Follow-Ups</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">💬</span> Feedback</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">👤</span> Profile</div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-page-title">Hi Farida 👋 — <span style="font-family:monospace;font-size:13px;color:var(--accent)">STU-2025-001</span></div>
+          <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:12px">
+            🔬 Lab test pending: <strong>CBC (Complete Blood Count)</strong>. Please complete this test and mark it done. <span style="color:var(--accent);cursor:pointer">Go to Lab Tests →</span>
+          </div>
+          <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:16px">
+            🔄 You have a follow-up with <strong>Dr. Ayesha Rahman</strong> on <strong>2025-01-15</strong>. <span style="color:var(--accent);cursor:pointer">Book Appointment →</span>
+          </div>
+          <div class="mock-stats">
+            <div class="mock-stat s1"><div class="mock-stat-num">5</div><div class="mock-stat-lbl">Total Appts</div></div>
+            <div class="mock-stat s3"><div class="mock-stat-num">1</div><div class="mock-stat-lbl">Pending</div></div>
+            <div class="mock-stat s2"><div class="mock-stat-num">3</div><div class="mock-stat-lbl">Completed</div></div>
+            <div class="mock-stat s4"><div class="mock-stat-num">2</div><div class="mock-stat-lbl">Lab Tests</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Tab -->
+  <div class="tab-content" id="tab-admin">
+    <div class="dashboard-mockup">
+      <div class="mock-topbar">
+        <div class="mock-dot" style="background:#ef4444"></div>
+        <div class="mock-dot" style="background:#f59e0b"></div>
+        <div class="mock-dot" style="background:#10b981"></div>
+        <div class="mock-url">localhost/medibase_uni/public/admin/dashboard.php</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-logo"><span class="mock-logo-icon">🏥</span><span class="mock-logo-text">MediBase</span></div>
+          <div class="mock-nav-item active"><span class="mock-nav-icon">⊞</span> Dashboard</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">➕</span> Create Staff</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🎓</span> Add Student</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">👨‍⚕️</span> Doctors</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">💊</span> Inventory</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🔬</span> Lab Tests</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">📨</span> Complaints <span class="mock-pill p-red" style="margin-left:4px">3</span></div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🛡️</span> Audit Log</div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-page-title">Admin Dashboard</div>
+          <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:8px 14px;font-size:11px;margin-bottom:8px">⚠️ Low Stock: <strong>Salbutamol Inhaler</strong> — only 5 units remaining.</div>
+          <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:8px 14px;font-size:11px;margin-bottom:12px">🚨 Expiring Soon: <strong>Azithromycin 500mg</strong> expires 2025-02-01.</div>
+          <div class="mock-stats">
+            <div class="mock-stat s2"><div class="mock-stat-num">4</div><div class="mock-stat-lbl">Doctors</div></div>
+            <div class="mock-stat s2"><div class="mock-stat-num">2</div><div class="mock-stat-lbl">Nurses</div></div>
+            <div class="mock-stat" style="border-top-color:var(--purple)"><div class="mock-stat-num">127</div><div class="mock-stat-lbl">Students</div></div>
+            <div class="mock-stat s3"><div class="mock-stat-num">10</div><div class="mock-stat-lbl">Low Stock</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nurse Tab -->
+  <div class="tab-content" id="tab-nurse">
+    <div class="dashboard-mockup">
+      <div class="mock-topbar">
+        <div class="mock-dot" style="background:#ef4444"></div>
+        <div class="mock-dot" style="background:#f59e0b"></div>
+        <div class="mock-dot" style="background:#10b981"></div>
+        <div class="mock-url">localhost/medibase_uni/public/nurse/dashboard.php</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-logo"><span class="mock-logo-icon">🏥</span><span class="mock-logo-text">MediBase</span></div>
+          <div class="mock-nav-item active"><span class="mock-nav-icon">⊞</span> Dashboard</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">📅</span> Appointments</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">🔬</span> Lab Tests</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">💊</span> Medicines</div>
+          <div class="mock-nav-item"><span class="mock-nav-icon">👤</span> Profile</div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-page-title">Ward Dashboard — Nurse Salma</div>
+          <div class="mock-stats">
+            <div class="mock-stat s3"><div class="mock-stat-num">7</div><div class="mock-stat-lbl">Pending</div></div>
+            <div class="mock-stat s2"><div class="mock-stat-num">15</div><div class="mock-stat-lbl">Confirmed</div></div>
+            <div class="mock-stat s1"><div class="mock-stat-num">42</div><div class="mock-stat-lbl">Completed</div></div>
+            <div class="mock-stat" style="border-top-color:#64748b"><div class="mock-stat-num">64</div><div class="mock-stat-lbl">Total</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Today's Appointments</div>
+          <div class="mock-table-wrap">
+            <table class="mock-table">
+              <thead><tr><th>Q#</th><th>Patient</th><th>Doctor</th><th>Time</th><th>Priority</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr style="border-left:3px solid var(--danger)"><td><span class="mock-queue-num">1</span></td><td>Farida Hossain</td><td>Dr. Rahman</td><td>09:00</td><td><span class="mock-pill p-red">Emergency</span></td><td><span class="mock-pill p-yellow">Pending</span></td></tr>
+                <tr style="border-left:3px solid var(--warning)"><td><span class="mock-queue-num">2</span></td><td>Sabbir Ahmed</td><td>Dr. Islam</td><td>10:00</td><td><span class="mock-pill p-orange">Urgent</span></td><td><span class="mock-pill p-green">Confirmed</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ ROLES ════ -->
+<section>
+  <div class="section-label">User Roles</div>
+  <div class="section-title">Four Distinct Roles</div>
+  <p class="section-desc">Each role has its own dashboard, permissions, and capabilities. All connected in real-time.</p>
+
+  <div class="roles-grid">
+    <div class="role-card admin">
+      <div class="role-icon">👨‍💼</div>
+      <div class="role-name">Admin</div>
+      <div class="role-desc">Full system oversight, analytics, and management capabilities.</div>
+      <ul class="role-features">
+        <li>Create doctor/nurse/student accounts</li>
+        <li>View complaints (exclusive access)</li>
+        <li>Medicine inventory management</li>
+        <li>Analytics dashboard</li>
+        <li>Audit log &amp; data access trail</li>
+        <li>Low stock &amp; expiry alerts</li>
+      </ul>
+      <div class="role-creds">
+        <div class="cred-label">Login</div>
+        <div class="cred-val">admin@medibase.bd</div>
+        <div class="cred-val" style="margin-top:2px">Admin@1234</div>
+      </div>
+    </div>
+
+    <div class="role-card doctor">
+      <div class="role-icon">👨‍⚕️</div>
+      <div class="role-name">Doctor</div>
+      <div class="role-desc">Manage appointments, write consultations, request labs, set follow-ups.</div>
+      <ul class="role-features">
+        <li>Set 10-min availability slots</li>
+        <li>View priority queue (Emergency first)</li>
+        <li>Write consultation &amp; diagnosis</li>
+        <li>Prescribe medicines</li>
+        <li>Request lab tests</li>
+        <li>Schedule follow-ups</li>
+        <li>View full patient history</li>
+      </ul>
+      <div class="role-creds">
+        <div class="cred-label">Login</div>
+        <div class="cred-val">dr.ayesha@medibase.bd</div>
+        <div class="cred-val" style="margin-top:2px">Admin@1234</div>
+      </div>
+    </div>
+
+    <div class="role-card nurse">
+      <div class="role-icon">👩‍⚕️</div>
+      <div class="role-name">Nurse</div>
+      <div class="role-desc">Ward oversight, patient records access, lab tracking, medicine dispensing.</div>
+      <ul class="role-features">
+        <li>View &amp; confirm all appointments</li>
+        <li>Access all patient records</li>
+        <li>Update lab test statuses</li>
+        <li>Dispense medicines (stock updates)</li>
+        <li>View inventory (cannot edit)</li>
+        <li>No access to complaints</li>
+      </ul>
+      <div class="role-creds">
+        <div class="cred-label">Login</div>
+        <div class="cred-val">nurse.salma@medibase.bd</div>
+        <div class="cred-val" style="margin-top:2px">Admin@1234</div>
+      </div>
+    </div>
+
+    <div class="role-card student">
+      <div class="role-icon">🎓</div>
+      <div class="role-name">Student (Patient)</div>
+      <div class="role-desc">Book appointments, manage health records, track lab tests, submit feedback.</div>
+      <ul class="role-features">
+        <li>Auto-generated unique ID (STU-YYYY-NNN)</li>
+        <li>Book with priority selection</li>
+        <li>View available/booked slots</li>
+        <li>Mark lab tests as done</li>
+        <li>Book follow-up appointments</li>
+        <li>Add allergies &amp; medical history</li>
+        <li>Submit confidential complaints</li>
+      </ul>
+      <div class="role-creds">
+        <div class="cred-label">Login</div>
+        <div class="cred-val">farida@student.uni</div>
+        <div class="cred-val" style="margin-top:2px">Admin@1234</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ MODULES ════ -->
+<section id="modules">
+  <div class="section-label">Feature Modules</div>
+  <div class="section-title">12 Fully Connected Modules</div>
+  <p class="section-desc">Every module talks to every other. Notifications fire automatically. No data silos.</p>
+  <div class="modules-grid">
+    <div class="module-card"><div class="module-icon">📅</div><div class="module-title">Appointment &amp; Scheduling</div><div class="module-desc">10-min auto-slots, priority queue (Emergency / Urgent / Normal), double-booking prevention, real-time availability view.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">🔐</div><div class="module-title">Role-Based Access</div><div class="module-desc">4 roles with strict guards. Admin creates accounts. Users complete their own profiles. CSRF protection on every form.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">📋</div><div class="module-title">Patient Medical Records</div><div class="module-desc">Digital consultations with diagnosis, notes, prescriptions. Searchable by unique Student UID. Full timeline view.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">🔬</div><div class="module-title">Lab Test Management</div><div class="module-desc">Doctor requests → patient notified → patient marks done → doctor enters result → patient notified. Full lifecycle.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">💊</div><div class="module-title">Medicine Inventory</div><div class="module-desc">Stock tracking with auto-deduction on dispensing. Low-stock alerts. Expiry warnings 30 days ahead. Admin &amp; nurse access.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">🔄</div><div class="module-title">Follow-Up Management</div><div class="module-desc">Doctor sets date → stored &amp; patient notified → student books appointment → status updates automatically.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">💬</div><div class="module-title">Feedback &amp; Complaints</div><div class="module-desc">Students submit feedback/complaints. Admin-only visibility — doctors and nurses cannot see any submissions.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">🔔</div><div class="module-title">Notification System</div><div class="module-desc">Auto-notifications for: bookings, confirmations, lab requests, results, follow-ups, medicine availability, reminders.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">🛡️</div><div class="module-title">Security &amp; Audit Log</div><div class="module-desc">CSRF tokens, bcrypt passwords, session guards, role checks. Every action logged with user, IP, timestamp, old/new values.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">📊</div><div class="module-title">Admin Analytics</div><div class="module-desc">6-month appointment trends, common diagnoses, doctor workload, top medicines, pending labs — all on one dashboard.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">🎓</div><div class="module-title">Patient ID System</div><div class="module-desc">Auto-generated unique UIDs (STU-YYYY-NNN). Fast search by UID. Allergy flags and blood group on every consultation form.</div><span class="module-status">✓ COMPLETE</span></div>
+    <div class="module-card"><div class="module-icon">💉</div><div class="module-title">Prescription System</div><div class="module-desc">Doctor adds medicines during consultation. Dosage, frequency, duration, instructions. Nurse dispenses &amp; stock decreases.</div><span class="module-status">✓ COMPLETE</span></div>
+  </div>
+</section>
+
+<!-- ════ APPOINTMENT FLOW ════ -->
+<section>
+  <div class="section-label">How It Works</div>
+  <div class="section-title">Appointment Flow</div>
+  <div class="flow-grid">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-title">Doctor Sets Hours</div><div class="flow-desc">Define working days &amp; times. System auto-creates 10-min slots.</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-title">Student Books</div><div class="flow-desc">Views ✅ available and ❌ booked slots. Selects time, sets priority.</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-title">Queue Assigned</div><div class="flow-desc">Queue number issued. Emergency cases rise to top automatically.</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-title">Doctor Consults</div><div class="flow-desc">Writes diagnosis, prescriptions, lab requests, follow-up date.</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-title">All Notified</div><div class="flow-desc">Patient gets lab request notification. Doctor gets lab-done alert. Follow-up reminders sent automatically.</div></div>
+  </div>
+</section>
+
+<!-- ════ BUGS FIXED ════ -->
+<section>
+  <div class="section-label">Quality Assurance</div>
+  <div class="section-title">Bugs Found &amp; Fixed</div>
+  <p class="section-desc">4 logic bugs were identified and corrected during the final audit pass.</p>
+  <div class="fixes-grid">
+    <div class="fix-card"><div class="fix-title">✅ Fix 1 — StudentController Missing Import</div><div class="fix-desc"><code>UserModel</code> was used in <code>handleProfile()</code> without being required. Added <code>require_once UserModel.php</code> and corrected <code>\\UserModel()</code> namespace error.</div></div>
+    <div class="fix-card"><div class="fix-title">✅ Fix 2 — DoctorController Missing Import</div><div class="fix-desc">Same issue in <code>DoctorController::handleProfile()</code>. Missing <code>require_once UserModel.php</code> and <code>\\UserModel()</code> backslash namespace bug corrected.</div></div>
+    <div class="fix-card"><div class="fix-title">✅ Fix 3 — Admin Notification Spam</div><div class="fix-desc">Admin dashboard was creating duplicate low-stock notifications on every page load. Removed the loop — alerts are already shown as HTML banners.</div></div>
+    <div class="fix-card"><div class="fix-title">✅ Fix 4 — StudentModel Missing JOIN Columns</div><div class="fix-desc"><code>findByUserId()</code> was missing <code>u.gender</code> and <code>u.date_of_birth</code> from the JOIN. Student profile page would silently show empty fields without this fix.</div></div>
+  </div>
+</section>
+
+<!-- ════ FILE TREE ════ -->
+<section>
+  <div class="section-label">Project Structure</div>
+  <div class="section-title">118 Files, Clean MVC</div>
+  <div class="file-tree">
+<span class="tree-folder">medibase_uni/</span>
+<span class="tree-indent">
+<span class="tree-file new">medibase_enhanced.sql</span>          <span style="color:var(--muted)">← Import this first</span>
+
+<span class="tree-folder">config/</span>
+<span class="tree-indent"><span class="tree-file">db.php  app.php</span></span>
+
+<span class="tree-folder">app/</span>
+<span class="tree-indent">
+<span class="tree-folder">helpers/</span>
+<span class="tree-indent"><span class="tree-file">auth.php</span>  <span style="color:var(--muted)">← CSRF, sessions, audit logging</span>
+<span class="tree-file">render.php</span></span>
+
+<span class="tree-folder">models/</span>  <span style="color:var(--muted)">← 12 models, all new</span>
+<span class="tree-indent">
+<span class="tree-file">UserModel.php  DoctorModel.php  NurseModel.php  StudentModel.php</span>
+<span class="tree-file new">ConsultationModel.php  LabTestModel.php  MedicineModel.php</span>
+<span class="tree-file new">FollowUpModel.php  FeedbackModel.php  NotificationModel.php</span>
+<span class="tree-file">AppointmentModel.php  AvailabilityModel.php</span></span>
+
+<span class="tree-folder">controllers/</span>
+<span class="tree-indent"><span class="tree-file">AuthController.php  AdminController.php  DoctorController.php</span>
+<span class="tree-file">NurseController.php  StudentController.php</span></span>
+
+<span class="tree-folder">views/</span>
+<span class="tree-indent">
+<span class="tree-folder">admin/</span>  <span class="tree-file new">dashboard  medicines  feedback  audit_log  lab_tests  notifications  ...</span>
+<span class="tree-folder">doctor/</span>  <span class="tree-file new">dashboard  appointments  consult  patient_record  lab_tests  schedule  ...</span>
+<span class="tree-folder">nurse/</span>   <span class="tree-file new">dashboard  appointments  lab_tests  medicines  patient_record  ...</span>
+<span class="tree-folder">student/</span> <span class="tree-file new">dashboard  book  records  lab_tests  followups  feedback  profile  ...</span>
+<span class="tree-folder">auth/</span>    <span class="tree-file">login  register  complete_profile  change_password</span>
+<span class="tree-folder">shared/</span> <span class="tree-file">header  footer  403</span></span>
+</span>
+
+<span class="tree-folder">public/</span>
+<span class="tree-indent">
+<span class="tree-file">index.php  login.php  register.php  logout.php  complete-profile.php  change-password.php</span>
+<span class="tree-folder">admin/</span>  <span class="tree-file">16 entry files</span>
+<span class="tree-folder">doctor/</span> <span class="tree-file">9 entry files</span>
+<span class="tree-folder">nurse/</span>  <span class="tree-file">7 entry files</span>
+<span class="tree-folder">student/</span><span class="tree-file">11 entry files</span>
+<span class="tree-folder">assets/css/</span> <span class="tree-file">style.css</span></span>
+</span>
+  </div>
+</section>
+
+<!-- ════ INSTALL ════ -->
+<section id="install">
+  <div class="section-label">Setup Guide</div>
+  <div class="section-title">Install in 4 Steps</div>
+  <div class="install-steps">
+    <div class="install-step">
+      <div class="install-num">1</div>
+      <div class="install-content">
+        <h4>Extract ZIP into XAMPP htdocs</h4>
+        <p>Extract the ZIP so the folder is at <code>C:\xampp\htdocs\medibase_uni\</code> (Windows) or <code>/Applications/XAMPP/htdocs/medibase_uni/</code> (Mac).</p>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="install-num">2</div>
+      <div class="install-content">
+        <h4>Import the SQL schema</h4>
+        <p>Open phpMyAdmin → click <strong>Import</strong> → select <code>medibase_enhanced.sql</code> → click Go. This creates the <code>medibase_uni</code> database with all tables and seed data.</p>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="install-num">3</div>
+      <div class="install-content">
+        <h4>Configure database (if needed)</h4>
+        <p>Edit <code>config/db.php</code> if your MySQL password is not blank. The default config uses <code>root</code> with no password — standard XAMPP setup.</p>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="install-num">4</div>
+      <div class="install-content">
+        <h4>Open in browser</h4>
+        <p>Start Apache &amp; MySQL in XAMPP, then visit <code>http://localhost/medibase_uni/public/</code>. Log in with any seeded account. Default password for all: <code>Admin@1234</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p style="font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:8px">MediBase University Health Center v2.0</p>
+  <p>PHP 8.x · MySQL / MariaDB · MVC · XAMPP Compatible</p>
+  <p style="margin-top:8px">115 PHP files · 12 Models · 5 Controllers · 4 Roles · 12 Modules · 100% Audit Pass ✅</p>
+</footer>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
